@@ -337,8 +337,8 @@
     <string name="compose_player_color">Farba</string>
     <string name="compose_player_currently_playing">Práve sa prehráva</string>
     <string name="compose_player_episode_code_episode_only">E%1$d</string>
-    <string name="compose_player_episode_code_full">S%1$dE%2$d</string>
-    <string name="compose_player_episode_title_format">S%1$dE%2$d • %3$s</string>
+    <string name="compose_player_episode_code_full">S%1$d E%2$d</string>
+    <string name="compose_player_episode_title_format">S%1$d E%2$d • %3$s</string>
     <string name="compose_player_episodes">Epizódy</string>
     <string name="compose_player_font_size">Veľkosť písma</string>
     <string name="compose_player_font_size_value">%1$dsp</string>
@@ -964,11 +964,8 @@
     <string name="settings_playback_timeout_unlimited">Neobmedzene</string>
     <string name="settings_playback_tunneled_playback">Tunelované prehrávanie</string>
     <string name="settings_playback_tunneled_playback_description">Synchronizácia zvuku/videa na hardvérovej úrovni. Môže zlepšiť prehrávanie na niektorých zariadeniach Android TV</string>
-    <string name="settings_tmdb_add_api_key_first">Pred zapnutím obohatenia pridajte nižšie vlastný API kľúč TMDB.</string>
-    <string name="settings_tmdb_api_key_label">API kľúč</string>
     <string name="settings_tmdb_enable_enrichment">Povoliť obohatenie TMDB</string>
     <string name="settings_tmdb_enable_enrichment_description">Použiť TMDB ako zdroj metadát na vylepšenie dát doplnku</string>
-    <string name="settings_tmdb_enter_api_key">Zadajte váš API kľúč TMDB v3.</string>
     <string name="settings_tmdb_language_code_label">Kód jazyka</string>
     <string name="settings_tmdb_module_artwork">Umelecké diela</string>
     <string name="settings_tmdb_module_artwork_description">Obrázky loga a pozadia z TMDB</string>
@@ -992,10 +989,8 @@
     <string name="settings_tmdb_module_season_posters_description">Použiť plagáty sérií TMDB vo výbere sérií na obrazovke metadát pre seriály.</string>
     <string name="settings_tmdb_module_trailers">Trailery</string>
     <string name="settings_tmdb_module_trailers_description">Kandidáti na trailer z videí TMDB pre sekciu trailerov v podrobnostiach</string>
-    <string name="settings_tmdb_personal_api_key">Osobný API kľúč</string>
     <string name="settings_tmdb_preferred_language">Jazyk</string>
     <string name="settings_tmdb_preferred_language_description">Jazyk metadát TMDB pre názov, logo a povolené polia</string>
-    <string name="settings_tmdb_section_credentials">PRIHLASOVACIE ÚDAJE</string>
     <string name="settings_tmdb_section_localization">LOKALIZÁCIA</string>
     <string name="settings_tmdb_section_modules">MODULY</string>
     <string name="settings_tmdb_section_title">OBOHATENIE TMDB</string>
@@ -1060,7 +1055,7 @@
     <string name="theme_white">Biela</string>
     <string name="player_next_episode">Ďalšia epizóda</string>
     <string name="player_next_episode_finding_source">Hľadanie zdroja…</string>
-    <string name="player_next_episode_playing_via_countdown">Prehráva sa cez %1$s za %2$d…</string>
+    <string name="player_next_episode_playing_via_countdown">Prehráva sa cez %1$s za %2$ds…</string>
     <string name="player_next_episode_thumbnail">Miniatúra ďalšej epizódy</string>
     <string name="player_next_episode_unaired">Nevysielané</string>
     <string name="player_skip">Preskočiť</string>
@@ -1290,7 +1285,7 @@
     <string name="streams_empty_no_streams_message">Žiadny z vašich nainštalovaných doplnkov nevrátil streamy pre tento titul.</string>
     <string name="streams_episode_badge">S%1$d E%2$d</string>
     <string name="streams_episode_fallback_title">Epizóda</string>
-    <string name="streams_episode_title_with_name">S%1$dE%2$d - %3$s</string>
+    <string name="streams_episode_title_with_name">S%1$d E%2$d - %3$s</string>
     <string name="streams_fetching">Načítavanie…</string>
     <string name="streams_finding_source">Hľadanie zdroja…</string>
     <string name="streams_loading_subtitles">Načítavanie titulkov z doplnkov…</string>
@@ -1342,7 +1337,7 @@
     <string name="auth_sign_up_failed">Registrácia zlyhala</string>
     <string name="catalog_load_failed">Nepodarilo sa načítať položky katalógu.</string>
     <string name="continue_watching_up_next">Ďalšie na rade</string>
-    <string name="continue_watching_up_next_episode">Ďalšie na rade • S%1$dE%2$d</string>
+    <string name="continue_watching_up_next_episode">Ďalšie na rade • S%1$d E%2$d</string>
     <string name="detail_logo_content_description">Logo %1$s</string>
     <string name="details_comments_load_failed">Nepodarilo sa načítať komentáre</string>
     <string name="details_load_failed_all_addons">Nepodarilo sa načítať podrobnosti z žiadneho doplnku.</string>
@@ -1412,7 +1407,6 @@
     <string name="trakt_error_add_list_failed">Nepodarilo sa pridať do zoznamu Trakt</string>
     <string name="trakt_error_missing_ids">Chýbajúce kompatibilné ID Trakt</string>
     <string name="trakt_error_empty_response">Prázdne telo odpovede</string>
-    <string name="tmdb_sources_api_key_required">Pridajte API kľúč TMDB v Nastaveniach, aby ste mohli používať zdroje TMDB.</string>
     <string name="tmdb_sources_collection_fallback_title">Kolekcia TMDB %1$d</string>
     <string name="tmdb_sources_collection_not_found">Kolekcia TMDB sa nenašla</string>
     <string name="tmdb_sources_company_fallback_title">Produkcia TMDB %1$d</string>
@@ -1753,7 +1747,6 @@
     <string name="collections_editor_tmdb_production_title_format">TMDB Produkcia %1$s</string>
     <string name="collections_editor_tmdb_source_load_failed">Nepodarilo sa načítať TMDB zdroj</string>
     <string name="collections_editor_trakt_list_id_format">ID %1$s</string>
-    <string name="collections_tmdb_api_key_required">Pridajte TMDB API kľúč v Nastaveniach na použitie TMDB zdrojov.</string>
     <string name="collections_tmdb_collection_not_found">TMDB kolekcia nebola nájdená</string>
     <string name="collections_tmdb_company_not_found">TMDB spoločnosť nebola nájdená</string>
     <string name="collections_tmdb_discover_no_data">TMDB objavovanie nevrátilo žiadne dáta</string>
@@ -1796,8 +1789,6 @@
     <string name="plugins_badge_providers">%1$d poskytovateľov</string>
     <string name="plugins_badge_refreshing">Obnovuje sa</string>
     <string name="plugins_badge_repos">%1$d repozitárov</string>
-    <string name="plugins_badge_tmdb_key_missing">Chýba TMDB API kľúč</string>
-    <string name="plugins_badge_tmdb_key_set">TMDB API kľúč nastavený</string>
     <string name="plugins_button_install_repo">Nainštalovať repozitár pluginov</string>
     <string name="plugins_button_installing">Inštaluje sa…</string>
     <string name="plugins_button_test_provider">Otestovať poskytovateľa</string>
@@ -1841,7 +1832,6 @@
     <string name="plugins_test_error_title">Chyba</string>
     <string name="plugins_test_failed">Test poskytovateľa zlyhal</string>
     <string name="plugins_test_results_count">Výsledky testu (%1$d)</string>
-    <string name="plugins_tmdb_required_message">Pluginy poskytovateľov vyžadujú TMDB API kľúč. Nastavte ho na obrazovke TMDB, inak pluginy poskytovateľov nebudú fungovať správne.</string>
     <string name="search_error_no_results_for_catalog">Žiadne výsledky vyhľadávania pre %1$s.</string>
     <string name="settings_playback_introdb_invalid_key">Neplatný API kľúč alebo zlyhalo pripojenie</string>
     <string name="streams_plugin_repository_fallback">Repozitár pluginov</string>
@@ -2000,8 +1990,6 @@
     <string name="settings_meta_background_mode_dominant_description">Prispôsobiť pozadie stránky dominantnej farbe z obrázka na pozadí.</string>
     <string name="settings_playback_parental_guide">Upozornenia na obsah</string>
     <string name="settings_playback_parental_guide_description">Zobraziť rodičovské upozornenie pri spustení prehrávania.</string>
-    <string name="settings_tmdb_module_release_dates">Dátumy vydania</string>
-    <string name="settings_tmdb_module_release_dates_description">Používať dátumy vysielania z TMDB namiesto presných časov vydania z doplnkov</string>
     <string name="source_mal">MyAnimeList</string>
     <string name="updates_debug_test_complete">Test bannera dokončený</string>
     <string name="updates_debug_test_description">Zobraziť náhľad bannera a simulovaného priebehu sťahovania.</string>
@@ -2133,4 +2121,30 @@
     <string name="library_simkl_empty_title">Váš zoznam sledovania Simkl je prázdny</string>
     <string name="library_simkl_load_failed">Nepodarilo sa načítať zoznam sledovania Simkl</string>
     <string name="library_simkl_title">Zoznam sledovania Simkl</string>
+    <string name="layout_overall_ratings">Celkové hodnotenia</string>
+    <string name="layout_overall_ratings_sub_on">Zobrazujú sa štandardné hodnotenia a hodnotenia TMDB</string>
+    <string name="layout_overall_ratings_sub_off">Štandardné hodnotenia a hodnotenia TMDB sú skryté. Na stránkach detailov majú prioritu nastavenia poskytovateľa MDBList</string>
+    <string name="layout_episode_ratings">Hodnotenia epizód</string>
+    <string name="layout_episode_ratings_sub">Vyberte, ktoré hodnotenia epizód budú viditeľné</string>
+    <string name="layout_ratings_show">Zobraziť</string>
+    <string name="layout_ratings_hide">Skryť</string>
+    <string name="layout_ratings_hide_unwatched">Skryť nepozerané</string>
+    <string name="series_status_ended">Ukončené</string>
+    <string name="series_status_continuing">Prebieha</string>
+    <string name="series_status_current">Aktuálne</string>
+    <string name="series_status_cancelled">Zrušené</string>
+    <string name="series_status_released">Vydané</string>
+    <string name="series_status_planned">Plánované</string>
+    <string name="series_status_rumored">Nepotvrdené</string>
+    <string name="series_status_in_production">Vo výrobe</string>
+    <string name="series_status_post_production">V postprodukcii</string>
+    <string name="movie_status_ended">Ukončené</string>
+    <string name="movie_status_continuing">Prebieha</string>
+    <string name="movie_status_current">Aktuálne</string>
+    <string name="movie_status_cancelled">Zrušené</string>
+    <string name="movie_status_released">Vydané</string>
+    <string name="movie_status_planned">Plánované</string>
+    <string name="movie_status_rumored">Nepotvrdené</string>
+    <string name="movie_status_in_production">Vo výrobe</string>
+    <string name="movie_status_post_production">V postprodukcii</string>
 </resources>

@@ -58,6 +58,8 @@ data class DetailSecondaryAction(
 fun DetailActionButtons(
     modifier: Modifier = Modifier,
     playLabel: String = stringResource(Res.string.action_play),
+    playEnabled: Boolean = true,
+    pinnedAction: DetailSecondaryAction? = null,
     secondaryActions: List<DetailSecondaryAction> = emptyList(),
     actionsMenuLabel: String = stringResource(Res.string.details_actions_menu_label),
     isTablet: Boolean = false,
@@ -95,13 +97,14 @@ fun DetailActionButtons(
                     .weight(1f)
                     .height(buttonHeight),
                 shape = playShape,
-                color = MaterialTheme.colorScheme.onBackground,
-                contentColor = MaterialTheme.colorScheme.background,
+                color = if (playEnabled) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.surfaceVariant,
+                contentColor = if (playEnabled) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .combinedClickable(
+                            enabled = playEnabled,
                             onClick = {
                                 onPlayClick()
                             },
@@ -129,6 +132,21 @@ fun DetailActionButtons(
                         overflow = TextOverflow.Ellipsis,
                     )
                 }
+            }
+
+            if (pinnedAction != null) {
+                Spacer(modifier = Modifier.width(12.dp))
+                DetailIconAction(
+                    label = pinnedAction.label,
+                    icon = pinnedAction.icon,
+                    active = pinnedAction.isActive,
+                    progress = 1f,
+                    size = iconButtonSize,
+                    onClick = {
+                        hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                        pinnedAction.onClick()
+                    },
+                )
             }
 
             if (hasSecondaryActions) {

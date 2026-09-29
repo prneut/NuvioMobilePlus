@@ -1,14 +1,12 @@
 package com.nuvio.app
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -17,7 +15,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.nuvio.app.core.ui.NuvioLoadingIndicator
 import com.nuvio.app.core.ui.NuvioToastController
@@ -41,10 +38,14 @@ import com.nuvio.app.features.streams.StreamLinkCacheRepository
 import com.nuvio.app.features.downloads.DownloadsRepository
 import com.nuvio.app.features.streams.StreamsRepository
 import com.nuvio.app.features.streams.StreamsScreen
+import com.nuvio.app.features.streams.shouldShowAutoPlayLoading
+import com.nuvio.app.features.streams.shouldUseLandscapeAutoPlayLoading
+import com.nuvio.app.features.streams.StreamsUiState
 import com.nuvio.app.navigation.*
 import kotlinx.coroutines.launch
 import nuvio.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.getString
 
 private data class PendingP2pStreamOpen(
     val stream: StreamItem,
@@ -62,6 +63,7 @@ internal fun StreamDestination(
     p2pEnabled: Boolean,
     openExternalPlayback: suspend (PlayerLaunch) -> Boolean,
     openExternalStreamUrl: (String) -> Boolean,
+    onLandscapeLoadingChanged: (Boolean) -> Unit,
 ) {
     val onBack = rememberGuardedPopBackStack(navController, route)
     val launch = remember(route.launchId) {
@@ -75,6 +77,7 @@ internal fun StreamDestination(
     }
     val pauseDescription = launch.pauseDescription
     val streamRouteScope = rememberCoroutineScope()
+    var autoPlayNavigationStarted by remember(route.launchId) { mutableStateOf(false) }
     var resolvingDebridStream by rememberSaveable(route.launchId) { mutableStateOf(false) }
     var pendingP2pStreamOpen by remember { mutableStateOf<PendingP2pStreamOpen?>(null) }
     val shouldResolveEpisodeVideoId =
@@ -215,6 +218,7 @@ internal fun StreamDestination(
             contentLanguage = resolveLaunchContentLanguage(),
         )
 
+        autoPlayNavigationStarted = replaceStreamRoute
         val launchId = PlayerLaunchStore.put(playerLaunch)
         StreamsRepository.cancelLoading()
         navController.navigate(PlayerRoute(launchId = launchId, title = playerLaunch.title)) {
@@ -334,12 +338,14 @@ internal fun StreamDestination(
             )
             if (playerSettings.externalPlayerEnabled) {
                 openExternalPlayback(playerLaunch)
+                StreamsRepository.cancelLoading()
                 StreamsRepository.setOverlayVisible(false)
                 reuseNavigated = true
                 return@LaunchedEffect
             }
             StreamsRepository.clear()
             reuseNavigated = true
+            autoPlayNavigationStarted = true
             val launchId = PlayerLaunchStore.put(playerLaunch)
             navController.navigate(PlayerRoute(launchId = launchId, title = playerLaunch.title)) {
                 popUpTo<StreamRoute> { inclusive = true }
@@ -355,6 +361,17 @@ internal fun StreamDestination(
         episode = launch.episodeNumber,
         manualSelection = launch.manualSelection,
     )
+    val showLoadingScreen = autoPlayNavigationStarted || resolvingDebridStream || streamsUiState.shouldShowAutoPlayLoading(
+        expectedRequestToken = expectedStreamsRequestToken,
+        settings = playerSettings,
+        manualSelection = launch.manualSelection,
+    )
+    val useLandscapeLoading = autoPlayNavigationStarted || streamsUiState.shouldUseLandscapeAutoPlayLoading(
+        expectedRequestToken = expectedStreamsRequestToken,
+        settings = playerSettings,
+        manualSelection = launch.manualSelection,
+    )
+    SideEffect { onLandscapeLoadingChanged(useLandscapeLoading) }
     var autoPlayHandled by rememberSaveable(launch.videoId, effectiveVideoId) { mutableStateOf(false) }
     LaunchedEffect(
         streamsUiState.autoPlayStream,
@@ -370,6 +387,7 @@ internal fun StreamDestination(
         if (streamsUiState.requestToken != expectedStreamsRequestToken) return@LaunchedEffect
         val selectedStream = streamsUiState.autoPlayStream ?: return@LaunchedEffect
         val stream = if (DirectDebridPlaybackResolver.shouldResolveToPlayableStream(selectedStream)) {
+            StreamsRepository.setOverlayVisible(true, getString(Res.string.debrid_resolving_stream))
             when (
                 val resolved = DirectDebridPlaybackResolver.resolveToPlayableStream(
                     stream = selectedStream,
@@ -500,6 +518,7 @@ internal fun StreamDestination(
         }
         StreamsRepository.consumeAutoPlay()
         StreamsRepository.cancelLoading()
+        autoPlayNavigationStarted = true
         val launchId = PlayerLaunchStore.put(playerLaunch)
         navController.navigate(PlayerRoute(launchId = launchId, title = playerLaunch.title)) {
             popUpTo<StreamRoute> { inclusive = true }
@@ -507,11 +526,21 @@ internal fun StreamDestination(
     }
 
     if (!hasResolvedVideoId) {
+        if (showLoadingScreen) {
+            StreamLoadingScreen(
+                launch = launch,
+                state = StreamsUiState(),
+                showStatus = playerSettings.showPlayerLoadingStatus,
+                resolvingDebridStream = false,
+                onBack = onBack,
+            )
+            return
+        }
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center,
         ) {
-            NuvioLoadingIndicator(color = MaterialTheme.nuvio.colors.accent)
+            NuvioLoadingIndicator()
         }
         return
     }
@@ -675,6 +704,7 @@ internal fun StreamDestination(
 
     Box(modifier = Modifier.fillMaxSize()) {
         StreamsScreen(
+            showLoadingScreen = showLoadingScreen,
             type = launch.type,
             videoId = effectiveVideoId,
             parentMetaId = launch.parentMetaId ?: effectiveVideoId,
@@ -733,25 +763,14 @@ internal fun StreamDestination(
                 },
             )
         }
-        if (resolvingDebridStream) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.nuvio.colors.overlayScrim.copy(alpha = MaterialTheme.nuvio.opacity.overlayHeavy)),
-                contentAlignment = Alignment.Center,
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.nuvio.spacing.cardPadding),
-                ) {
-                    NuvioLoadingIndicator(color = MaterialTheme.nuvio.colors.playerControlsForeground)
-                    Text(
-                        text = stringResource(Res.string.streams_finding_source),
-                        color = MaterialTheme.nuvio.colors.playerControlsForeground.copy(alpha = MaterialTheme.nuvio.opacity.overlayHeavy),
-                        style = MaterialTheme.typography.bodyMedium,
-                    )
-                }
-            }
+        if (showLoadingScreen) {
+            StreamLoadingScreen(
+                launch = launch,
+                state = streamsUiState.takeIf { it.requestToken == expectedStreamsRequestToken } ?: StreamsUiState(),
+                showStatus = playerSettings.showPlayerLoadingStatus,
+                resolvingDebridStream = resolvingDebridStream,
+                onBack = onBack,
+            )
         }
     }
 }
