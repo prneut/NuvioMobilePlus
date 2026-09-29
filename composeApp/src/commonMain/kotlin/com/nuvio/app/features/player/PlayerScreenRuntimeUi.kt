@@ -282,6 +282,8 @@ private fun PlayerScreenRuntime.RenderPlayerControls(displayedPositionMs: Long, 
             hideDetails = activeSkipInterval != null && !skipIntervalDismissed,
             onNextEpisodeClick = if (nextEpisodeInfo?.hasAired == true && !nextEpisodeAutoPlaySearching && nextEpisodeAutoPlayCountdown == null) {
                 {
+                    showNextEpisodeCard = true
+                    nextEpisodeAutoPlayJob?.cancel()
                     playNextEpisode()
                 }
             } else null,
@@ -298,11 +300,6 @@ private fun PlayerScreenRuntime.RenderPlayerControls(displayedPositionMs: Long, 
             onSeekBack = { seekBy(-10_000L) },
             onSeekForward = { seekBy(10_000L) },
             hasNextEpisode = isEpisode && nextEpisodeInfo != null && nextEpisodeInfo?.hasAired == true,
-            onNextEpisodeClick = {
-                showNextEpisodeCard = true
-                nextEpisodeAutoPlayJob?.cancel()
-                playNextEpisode()
-            },
             onResizeModeClick = { cycleResizeMode() },
             onSpeedClick = { cyclePlaybackSpeed() },
             onSubtitleClick = {

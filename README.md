@@ -12,6 +12,14 @@
 
 </div>
 
+## Nuvio Mobile Plus Fork
+
+This fork (`Nuvio Mobile Plus`) brings additional enhancements on top of official Nuvio Mobile:
+- **1-Click Movie & Episode Download**: Direct download trigger on the details screen and season episode list.
+- **Background Download Queue**: Downloads route directly to the native background scheduler without initiating playback.
+- **Skip Next Controls**: Dedicated Next Episode player button in center player controls.
+- **Custom In-App Updates**: Seamless update checks pointing to `prneut/NuvioMobilePlus`.
+
 ## Get Nuvio Mobile
 
 - [Android on Google Play](https://play.google.com/store/apps/details?id=com.nuvio.app)
