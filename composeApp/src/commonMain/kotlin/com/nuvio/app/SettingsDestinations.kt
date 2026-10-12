@@ -12,13 +12,11 @@ import com.nuvio.app.features.collection.CollectionRepository
 import com.nuvio.app.features.collection.FolderDetailRepository
 import com.nuvio.app.features.collection.FolderDetailScreen
 import com.nuvio.app.features.home.HomeCatalogSection
-import com.nuvio.app.features.home.MetaPreview
 import com.nuvio.app.features.settings.SettingsScreen
 import com.nuvio.app.navigation.AppRoute
 import com.nuvio.app.navigation.CollectionEditorPageRoute
 import com.nuvio.app.navigation.CollectionEditorRoute
 import com.nuvio.app.navigation.CollectionsRoute
-import com.nuvio.app.navigation.DetailRoute
 import com.nuvio.app.navigation.FolderDetailRoute
 import com.nuvio.app.navigation.NuvioNavigator
 import com.nuvio.app.navigation.SettingsPageRoute
@@ -155,8 +153,6 @@ internal fun FolderDestination(
     FolderDetailScreen(
         onBack = onBack,
         onCatalogClick = onCatalogClick,
-        onPosterClick = { meta: MetaPreview ->
-            navController.navigate(DetailRoute(type = meta.type, id = meta.id, title = meta.name))
-        },
+        onPosterClick = rememberOpenMeta(navController),
     )
 }

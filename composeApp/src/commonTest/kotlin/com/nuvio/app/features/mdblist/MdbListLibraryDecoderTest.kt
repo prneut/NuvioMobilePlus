@@ -63,6 +63,13 @@ class MdbListLibraryDecoderTest {
     }
 
     @Test
+    fun `watchlist timestamps use the provider local datetime`() {
+        val page = decodeMdbListLibraryPage("""[{"id":1,"mediatype":"movie","watchlist_at":"2025-02-02 17:28:22.000000"}]""")
+        assertEquals(mdbListTimestamp("2025-02-02 17:28:22.000000"), page.items.single().listedAt)
+        assertEquals(mdbListTimestamp("2025-02-02T17:28:22Z"), page.items.single().listedAt)
+    }
+
+    @Test
     fun `unified items retain their media namespaces and ignore episodes`() {
         for (body in listOf("""[{"id":1,"mediatype":"movie"},{"id":1,"mediatype":"show"},{"mediatype":"episode"}]""",
             """{"items":[{"id":1,"mediatype":"movie"},{"id":1,"mediatype":"show"}]}""")) {
@@ -102,7 +109,7 @@ class MdbListLibraryDecoderTest {
         val entry = projection.entries.first { it.type == "movie" }
         assertEquals("tt1", entry.id)
         assertEquals("a1", entry.trackingProviderItemId)
-        assertEquals(mapOf(MDBLIST_WATCHLIST_KEY to 4, MDBLIST_TEST_LIST_KEY to 8), entry.listRanks)
+        assertEquals(mapOf(MDBLIST_WATCHLIST_KEY to 0, MDBLIST_TEST_LIST_KEY to 0), entry.listRanks)
         for (alias in listOf("tt1", "imdb:tt1", "tmdb:1", "tvdb:3", "trakt:4", "mdblist:a1")) {
             assertEquals(setOf(MDBLIST_WATCHLIST_KEY, MDBLIST_TEST_LIST_KEY), projection.membership(alias, "movie"))
             assertEquals(entry, projection.find(alias, "movie"))

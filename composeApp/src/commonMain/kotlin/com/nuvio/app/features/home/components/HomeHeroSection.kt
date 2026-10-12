@@ -279,7 +279,7 @@ fun HomeHeroSection(
                         modifier = Modifier
                             .fillMaxWidth(layout.contentWidthFraction)
                             .widthIn(max = layout.contentMaxWidth),
-                        contentAlignment = if (layout.isTablet) Alignment.CenterStart else Alignment.Center,
+                        contentAlignment = Alignment.BottomStart,
                     ) {
                         visiblePages.forEach { layer ->
                             Box(
