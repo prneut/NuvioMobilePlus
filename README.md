@@ -38,7 +38,7 @@ cd NuvioMobile
 Android development requires Android Studio and the Android SDK.
 
 ```bash
-./gradlew :androidApp:assembleFullDebug
+./gradlew :androidApp:assembleFullRelease
 ```
 
 ### iOS
