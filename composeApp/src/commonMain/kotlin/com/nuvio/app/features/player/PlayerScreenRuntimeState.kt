@@ -98,6 +98,7 @@ internal class PlayerScreenRuntime(
     var sliderEdgePadding: Dp = 0.dp
     var overlayBottomPadding: Dp = 0.dp
     var sideGestureSystemEdgeExclusionPx: Float = 0f
+    var horizontalSeekSystemEdgeExclusionPx: Float = 0f
     var resizeModeFitLabel: String = ""
     var resizeModeFillLabel: String = ""
     var resizeModeZoomLabel: String = ""
@@ -222,6 +223,13 @@ internal class PlayerScreenRuntime(
     var pendingP2pSwitch by mutableStateOf<PendingPlayerP2pSwitch?>(null)
     var credentialRefreshJob by mutableStateOf<Job?>(null)
     var credentialRefreshAttemptedSourceUrl by mutableStateOf<String?>(null)
+    /** URL opened from the reuse-last-link cache; it is refreshed after a playback error even without a token. */
+    var linkCacheSourceUrl: String? = args.sourceUrl.takeIf { args.sourceFromLinkCache && it.isNotBlank() }
+    /** URL picked by auto source selection; only this source falls back to the next match on failure. */
+    var autoSelectedSourceUrl: String? = args.sourceUrl.takeIf { args.sourceAutoSelected && it.isNotBlank() }
+    var sourceFallbackAttempts = 0
+    val sourceFallbackTriedKeys = mutableSetOf<String>()
+    var sourceFallbackJob: Job? = null
 
     var showAudioModal by mutableStateOf(false)
     var showSubtitleModal by mutableStateOf(false)
@@ -243,6 +251,7 @@ internal class PlayerScreenRuntime(
     var playbackEngineOverride by mutableStateOf<AndroidPlaybackEngine?>(null)
     var engineFailoverTriggered by mutableStateOf(false)
     var engineFailoverDisarmed by mutableStateOf(false)
+    var engineFailoverSourceIdentity: String? = null
     var pendingEngineSwitchTrackPreference by mutableStateOf<PendingEngineSwitchTrackPreference?>(null)
     var audioTracks by mutableStateOf<List<AudioTrack>>(emptyList())
     var serverAudioTracks by mutableStateOf<List<AudioTrack>>(emptyList())
@@ -263,9 +272,17 @@ internal class PlayerScreenRuntime(
     var autoFetchedAddonSubtitlesForKey by mutableStateOf<String?>(null)
     var trackPreferenceRestoreApplied by mutableStateOf(false)
     var subtitleDelayMs by mutableStateOf(0)
+    var audioDelayMs by mutableStateOf(0)
+    /** Output the audio delay is remembered for; null while that setting is off. */
+    var audioOutputKey: String? = null
+    var audioAmplificationDb by mutableStateOf(0)
+    var centerMixLevelDb by mutableStateOf(0)
+    var centerMixAvailable by mutableStateOf(false)
     var subtitleAutoSyncState by mutableStateOf(SubtitleAutoSyncUiState())
 
     var lastSyncedSettingsResizeMode: PlayerResizeMode? = null
     var lastResetPlaybackIdentity: PlaybackKey? = null
+    var lastResetSourcePlaybackIdentity: PlaybackKey? = null
+    var lastAddonSubtitleSourceIdentity: PlaybackKey? = null
     var lastResetVideoIdentity: String? = null
 }
